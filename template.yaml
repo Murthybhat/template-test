@@ -1,0 +1,30 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: hello-sdv-service
+  title: Hello SDV Service
+  description: A minimal test service for validating Backburner template ingestion
+  tags:
+    - test
+    - sdv
+    - minimal
+  annotations:
+    backburner.io/workflow: .github/workflows/backburner-scaffold.yml
+spec:
+  owner: team-platform
+  type: service
+  parameters:
+    - title: Service Details
+      properties:
+        serviceName:
+          type: string
+          title: Service Name
+          description: Name of the new SDV service
+        ownerTeam:
+          type: string
+          title: Owner Team
+          description: Team responsible for this service
+  steps:
+    - id: log
+      name: Log Parameters
+      action: debug:log
