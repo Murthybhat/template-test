@@ -1,0 +1,8 @@
+name: autosar-adaptive-service
+title: AUTOSAR Adaptive Service
+description: Scaffolds a new AUTOSAR Adaptive Platform microservice with SOME/IP support
+owner: team-platform
+type: service
+tags: [autosar, adaptive, cpp]
+lifecycle: experimental
+workflow: .github/workflows/backburner-scaffold.yml
