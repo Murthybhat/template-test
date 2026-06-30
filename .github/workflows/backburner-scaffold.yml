@@ -1,11 +1,50 @@
 name: Backburner Scaffold
+run-name: backburner-${{ inputs.correlation_id }}
+
 on:
   workflow_dispatch:
     inputs:
       correlation_id:
         required: true
+      parameters:
+        required: true   # JSON blob of all form values, e.g. {"service_name":"x","destination_repo":"y","destination_org":"z"}
+
 jobs:
-  placeholder:
+  scaffold:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "placeholder for execution phase"
+      - uses: actions/checkout@v4
+
+      - name: Setup Python + Copier
+        run: pip install copier==9.3.1
+
+      - name: Extract parameters
+        id: params
+        run: |
+          echo "service_name=$(echo '${{ inputs.parameters }}' | jq -r '.service_name')" >> $GITHUB_OUTPUT
+          echo "ecu_target=$(echo '${{ inputs.parameters }}' | jq -r '.ecu_target')" >> $GITHUB_OUTPUT
+          echo "destination_repo=$(echo '${{ inputs.parameters }}' | jq -r '.destination_repo')" >> $GITHUB_OUTPUT
+          echo "destination_org=$(echo '${{ inputs.parameters }}' | jq -r '.destination_org')" >> $GITHUB_OUTPUT
+
+      - name: Run Copier
+        run: |
+          copier copy . /tmp/output \
+            --data "service_name=${{ steps.params.outputs.service_name }}" \
+            --data "ecu_target=${{ steps.params.outputs.ecu_target }}" \
+            --no-interaction \
+            --vcs-ref HEAD
+
+      - name: Create destination repo and push
+        env:
+          GH_TOKEN: ${{ secrets.SCAFFOLD_PAT }}
+        run: |
+          gh repo create ${{ steps.params.outputs.destination_org }}/${{ steps.params.outputs.destination_repo }} \
+            --private
+          cd /tmp/output
+          git init
+          git add .
+          git commit -m "chore: initial scaffold via backburner"
+          git branch -M main
+          git remote add origin \
+            https://x-access-token:${GH_TOKEN}@github.com/${{ steps.params.outputs.destination_org }}/${{ steps.params.outputs.destination_repo }}.git
+          git push -u origin main
