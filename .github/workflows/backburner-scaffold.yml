@@ -1,0 +1,11 @@
+name: Backburner Scaffold
+on:
+  workflow_dispatch:
+    inputs:
+      correlation_id:
+        required: true
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "placeholder for execution phase"
