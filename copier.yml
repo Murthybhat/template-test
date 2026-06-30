@@ -1,0 +1,20 @@
+service_name:
+  type: str
+  help: Name of the new SDV service
+  default: my-service
+
+ecu_target:
+  type: str
+  choices: [front-radar, lidar-fusion, gateway]
+  help: Target ECU platform
+
+use_someip:
+  type: bool
+  default: true
+  help: Enable SOME/IP communication
+
+protocols:
+  type: str
+  multiselect: true
+  choices: [someip, dds, can]
+  help: Communication protocols to enable
