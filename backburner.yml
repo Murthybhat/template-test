@@ -1,5 +1,5 @@
-name: autosar-adaptive-service
-title: AUTOSAR Adaptive Service
+name: autosar-adaptive-service-custom
+title: AUTOSAR Adaptive Service-Custom
 description: Scaffolds a new AUTOSAR Adaptive Platform microservice with SOME/IP support
 owner: team-platform
 type: service
