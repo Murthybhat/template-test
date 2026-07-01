@@ -18,3 +18,4 @@ protocols:
   multiselect: true
   choices: [someip, dds, can]
   help: Communication protocols to enable
+  default: someip
