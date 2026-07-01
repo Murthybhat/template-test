@@ -30,8 +30,7 @@ jobs:
         run: |
           copier copy . /tmp/output \
             --data "service_name=${{ steps.params.outputs.service_name }}" \
-            --data "ecu_target=${{ steps.params.outputs.ecu_target }}" \
-            --no-interaction \
+            --data "ecu_target=${{ steps.params.outputs.ecu_target }}" \          
             --vcs-ref HEAD
 
       - name: Create destination repo and push
