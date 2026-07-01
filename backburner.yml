@@ -6,3 +6,26 @@ type: service
 tags: [autosar, adaptive, cpp]
 lifecycle: experimental
 workflow: .github/workflows/backburner-scaffold.yml
+
+parameters:
+  - title: Service Details
+    properties:
+      service_name:
+        type: string
+        title: Service Name
+        description: Name of the AUTOSAR adaptive service (lowercase, hyphens allowed)
+      ecu_target:
+        type: string
+        title: ECU Target
+        description: Target ECU for this service
+
+  - title: Destination Repository
+    properties:
+      destination_org:
+        type: string
+        title: GitHub Organization
+        description: GitHub org or user where the new repo will be created (e.g. Murthybhat)
+      destination_repo:
+        type: string
+        title: Repository Name
+        description: Name of the new GitHub repository to create (e.g. my-adaptive-service)
