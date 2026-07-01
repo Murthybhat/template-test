@@ -45,6 +45,8 @@ jobs:
             --private
           cd /tmp/output
           git init
+          git config user.email "backburner@github-actions"
+          git config user.name "Backburner"
           git add .
           git commit -m "chore: initial scaffold via backburner"
           git branch -M main
