@@ -7,7 +7,7 @@ on:
       correlation_id:
         required: true
       parameters:
-        required: true   # JSON blob of all form values, e.g. {"service_name":"x","destination_repo":"y","destination_org":"z"}
+        required: true
 
 jobs:
   scaffold:
@@ -20,17 +20,21 @@ jobs:
 
       - name: Extract parameters
         id: params
+        env:
+          PARAMETERS: ${{ inputs.parameters }}
         run: |
-          echo "service_name=$(echo '${{ inputs.parameters }}' | jq -r '.service_name')" >> $GITHUB_OUTPUT
-          echo "ecu_target=$(echo '${{ inputs.parameters }}' | jq -r '.ecu_target')" >> $GITHUB_OUTPUT
-          echo "destination_repo=$(echo '${{ inputs.parameters }}' | jq -r '.destination_repo')" >> $GITHUB_OUTPUT
-          echo "destination_org=$(echo '${{ inputs.parameters }}' | jq -r '.destination_org')" >> $GITHUB_OUTPUT
+          echo "$PARAMETERS" > /tmp/params.json
+          echo "service_name=$(jq -r '.service_name' /tmp/params.json)" >> $GITHUB_OUTPUT
+          echo "ecu_target=$(jq -r '.ecu_target' /tmp/params.json)" >> $GITHUB_OUTPUT
+          echo "destination_repo=$(jq -r '.destination_repo' /tmp/params.json)" >> $GITHUB_OUTPUT
+          echo "destination_org=$(jq -r '.destination_org' /tmp/params.json)" >> $GITHUB_OUTPUT
 
       - name: Run Copier
         run: |
           copier copy . /tmp/output \
             --data "service_name=${{ steps.params.outputs.service_name }}" \
-            --data "ecu_target=${{ steps.params.outputs.ecu_target }}" \          
+            --data "ecu_target=${{ steps.params.outputs.ecu_target }}" \
+            --defaults \
             --vcs-ref HEAD
 
       - name: Create destination repo and push
